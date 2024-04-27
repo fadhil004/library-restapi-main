@@ -96,13 +96,7 @@ class BookController{
     
 
     static update(req, res, next){
-        const updatedProduct = {
-            title: req.body.title,
-            genre: req.body.genre,
-            releaseDate: new Date(req.body.releaseDate),
-            stock: Number(req.body.stock)
-        }
-        Book.update(updatedProduct, {
+        Book.update(req.body, {
             where: {
                 id: req.params.id
             },

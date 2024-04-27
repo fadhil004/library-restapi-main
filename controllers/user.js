@@ -11,9 +11,11 @@ class UserController{
             password
         })
         .then(Member => {
-            res.redirect('/')
+            return res.status(201).json(Member)
         })
-        .catch(next)
+        .catch(err => {
+            next({status: 400, message: err.message})
+        })
     }
 
     static createAuthor(req, res, next) {
@@ -24,9 +26,11 @@ class UserController{
             password
         })
         .then(Author => {
-            res.redirect('/')
+            res.status(201).json(Author)
         })
-        .catch(next)
+        .catch(err => {
+            next({status: 400, message: err.message})
+        })
     }
 
     static login(req, res, next) {
@@ -69,14 +73,16 @@ class UserController{
         Promise.all([memberPromise, authorPromise])
           .then(([memberResult, authorResult]) => {
             if (memberResult) {
-                res.redirect('/')
+                res.status(200).json(memberResult);
             } else if (authorResult) {
-                res.redirect('/')
+                res.status(200).json(authorResult);
             } else {
-              res.json({ message: 'Invalid email/password' });
+              next({ message: 'Invalid email/password', status: 401 });
             }
           })
-          .catch(next);
+          .catch(err => {
+            next({status: 400, message: err.message})
+        });
     }
 }
 

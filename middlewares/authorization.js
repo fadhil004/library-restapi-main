@@ -25,7 +25,7 @@ const authorization = (req, res ,next) => {
             if (!book) {
                 next({status: 400, message: 'Book not found'})
             }
-            if (book.authorId === authorId){
+            if (book.AuthorId === authorId){
                 next()
             } else {
                 next({status: 403,message: 'Access forbidden'})

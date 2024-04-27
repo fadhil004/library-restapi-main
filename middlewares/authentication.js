@@ -1,4 +1,3 @@
-const { verifyToken } = require("../helpers/jwt")
 const jwt = require('../helpers/jwt')
 
 const authentication = (req, res, next) => {
@@ -8,7 +7,7 @@ const authentication = (req, res, next) => {
         req.decoded = decode
         next()
     } catch (err) {
-        next({message: 'You should login first!', status: 400})
+        next({message: 'You should login first!', status: 401})
     }
 }
 

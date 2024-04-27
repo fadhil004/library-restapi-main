@@ -11,13 +11,12 @@ router.post('/register', UserController.createMember)
 router.post('/register/author', UserController.createAuthor)
 router.post('/login', UserController.login)
 
-router.use(authentication)
-router.get('/books', BookController.readAll)
-router.get('/books/:id', BookController.readOne)
-router.post('/books/loan/:id', BookController.loan)
-router.use(authorization)
-router.post('/books/add', BookController.create)
-router.patch('/books/edit/:id', BookController.update)
-router.delete('/books/delete/:id', BookController.delete)
+router.get('/books', authentication, BookController.readAll)
+router.get('/books/:id', authentication, BookController.readOne)
+router.post('/books/loan/:id', authentication, BookController.loan)
+
+router.post('/books/add', authentication, authorization, BookController.create)
+router.patch('/books/edit/:id', authentication, authorization, BookController.update)
+router.delete('/books/delete/:id', authentication, authorization, BookController.delete)
 
 module.exports = router

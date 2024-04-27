@@ -8,7 +8,9 @@ class BookController{
         .then(books => {
             res.status(200).json(books)
         })
-        .catch(next)
+        .catch(err => {
+            next({status: err.status, message: err.message})
+        })
     }
     
     static readOne(req, res, next){
@@ -16,7 +18,9 @@ class BookController{
         .then(books => {
             res.status(200).json(books)
         })
-        .catch(next)
+        .catch(err => {
+            next({status: err.status, message: err.message})
+        })
     }
 
     static create(req, res, next){
@@ -27,19 +31,24 @@ class BookController{
         .then(author => {
             authorName = author.name
 
-            return Book.create({
+            Book.create({
                 title,
                 author: authorName,
                 releaseDate,
                 genre,
                 stock: Number(stock),
-                authorId: authorId
+                AuthorId: author.id
+            })
+            .then(book => {
+                res.status(201).json(book)
+            })
+            .catch(err => {
+                next({status: err.status, message: err.message})
             })
         })
-        .then(book => {
-            res.status(201).json(book)
+        .catch(err => {
+            next({status: err.status, message: err.message})
         })
-        .catch(next)
     }
 
     static loan(req, res, next){
@@ -63,7 +72,6 @@ class BookController{
                     }
                     book.stock -= 1;
     
-                    // Perbarui penjualan penulis
                     Author.findByPk(book.AuthorId)
                     .then(author => {
                         if (author) {
@@ -84,14 +92,22 @@ class BookController{
                         .then(loan => {
                             res.status(201).json({ message: 'Book loaned successfully' });
                         })
-                        .catch(next);
+                        .catch(err => {
+                            next({status: err.status, message: err.message})
+                        });
                     })
-                    .catch(next);
+                    .catch(err => {
+                        next({status: err.status, message: err.message})
+                    });
                 })
-                .catch(next);
+                .catch(err => {
+                    next({status: err.status, message: err.message})
+                });
             }
         })
-        .catch(next);
+        .catch(err => {
+            next({status: err.status, message: err.message})
+        });
     }    
     
 
@@ -104,7 +120,9 @@ class BookController{
         .then(books => {
             res.status(200).json(books)
         })
-        .catch(next)
+        .catch(err => {
+            next({status: err.status, message: err.message})
+        })
     }
 
     static delete(req, res, next){
@@ -116,7 +134,9 @@ class BookController{
         .then(result => {
             res.status(200).json(result)
         })
-        .catch(next)
+        .catch(err => {
+            next({status: err.status, message: err.message})
+        })
     }
 
 }

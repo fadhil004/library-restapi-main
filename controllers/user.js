@@ -11,7 +11,7 @@ class UserController{
             password
         })
         .then(Member => {
-            return res.status(201).json(Member)
+            res.status(201).json(Member)
         })
         .catch(err => {
             next({status: 400, message: err.message})

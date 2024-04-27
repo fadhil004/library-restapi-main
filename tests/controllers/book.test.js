@@ -8,6 +8,9 @@ describe('BookController', () => {
         decoded: {
             id: 1
         },
+        params: {
+            id: 1
+        },
         body: {}
     }
     let res = jest.fn()
@@ -84,43 +87,37 @@ describe('BookController', () => {
                 expect(Book.destroy).toHaveBeenCalled()
               })
          })
+         describe('static loan', () => {
+            test('should return 400 if book is already loaned by the member', async () => { 
+                jest.spyOn(sequelize.models.Loan, 'findOne').mockResolvedValueOnce({});
+        
+                await BookController.loan(req, {}, next);
+                expect(sequelize.models.Loan.findOne).toHaveBeenCalled();
+                expect(next).toHaveBeenCalled(); 
+            });
+        
+            test('should return 400 if book is out of stock', async () => { 
+                jest.spyOn(sequelize.models.Loan, 'findOne').mockResolvedValueOnce(null);
+                jest.spyOn(Book, 'findByPk').mockResolvedValueOnce({ stock: 0 });
+        
+                await BookController.loan(req, {}, next);
+                expect(Book.findByPk).toHaveBeenCalled();
+                expect(next).toHaveBeenCalled(); 
+            });
+        
+            test('should loan book successfully', async () => { 
+                jest.spyOn(sequelize.models.Loan, 'findOne').mockResolvedValueOnce(null);
+                jest.spyOn(Book, 'findByPk').mockResolvedValueOnce({ stock: 2, AuthorId: 1 });
+                jest.spyOn(Author, 'findByPk').mockResolvedValueOnce({ sale: 5, save: jest.fn().mockResolvedValueOnce() });
+        
+                await BookController.loan(req, {}, next);
+                expect(Author.findByPk).toHaveBeenCalled();
+                expect(next).toHaveBeenCalled(); 
+            });
+        });
 
       
  })
 
 
-//  describe('static loan', () => {
-//     req.params ={
-//         id: 1
-//     } 
-//     test('should return 400 if book is already loaned by the member', async () => { 
-//         jest.spyOn(sequelize.models.Loan, 'findOne').mockResolvedValueOnce({});
-
-//         await BookController.loan(req, {}, next);
-//         expect(sequelize.models.Loan.findOne).toHaveBeenCalled();
-//         expect(next).toHaveBeenCalledWith(expect.any(Error)); // Assuming next is called with an error
-//     });
-
-//     test('should return 400 if book is out of stock', async () => { 
-//         jest.spyOn(sequelize.models.Loan, 'findOne').mockResolvedValueOnce(null);
-//         jest.spyOn(Book, 'findByPk').mockResolvedValueOnce({ stock: 0 });
-
-//         await BookController.loan(req, {}, next);
-//         expect(Book.findByPk).toHaveBeenCalled();
-//         expect(next).toHaveBeenCalledWith(expect.any(Error)); // Assuming next is called with an error
-//     });
-
-//     test('should loan book successfully', async () => { 
-//         jest.spyOn(sequelize.models.Loan, 'findOne').mockResolvedValueOnce(null);
-//         jest.spyOn(Book, 'findByPk').mockResolvedValueOnce({ stock: 2, AuthorId: 1 });
-//         jest.spyOn(Author, 'findByPk').mockResolvedValueOnce({ sale: 5, save: jest.fn().mockResolvedValueOnce() });
-//         jest.spyOn(Book.prototype, 'save').mockResolvedValueOnce({});
-//         jest.spyOn(sequelize.models.Loan, 'create').mockResolvedValueOnce({});
-
-//         await BookController.loan(req, {}, next);
-//         expect(Author.findByPk).toHaveBeenCalled();
-//         expect(Book.prototype.save).toHaveBeenCalled();
-//         expect(sequelize.models.Loan.create).toHaveBeenCalled();
-//         expect(next).toHaveBeenCalledWith(); // Assuming next is called without an error
-//     });
-// });
+ 

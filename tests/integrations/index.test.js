@@ -68,7 +68,43 @@ describe('integration testing', () => {
              })
           })
      })
-     describe('/POST login', () => { 
+     describe('/POST login as member', () => { 
+        describe('positive case', () => { 
+            test('should send an object (id, email, token) with status 200', (done) => { 
+                request(app)
+                .post('/login')
+                .send({
+                    email: 'dyl@mail.com',
+                    password: '123'
+                })
+                .end((err, res) => {
+                    expect(err).toBe(null)
+                    expect(res.status).toBe(200)
+                    expect(res.body).toHaveProperty('token', expect.any(String))
+                    expect(res.body).toHaveProperty('email', expect.any(String))
+                    expect(res.body).toHaveProperty('id', expect.any(Number))
+                    done()
+                })
+             })
+         })
+         describe('negative case', () => { 
+            test('should return error with status code 400 if input password incorrect', (done) => { 
+                request(app)
+                .post('/login')
+                .send({
+                    email: 'dyl@mail.com',
+                    password: 'wrongpassword'
+                })
+                .end((err, res) => {
+                    expect(err).toBe(null)
+                    expect(res.status).toBe(401)
+                    expect(res.body).toHaveProperty('err')
+                    done()
+                })
+             })
+          })
+      })
+     describe('/POST login as author', () => { 
         describe('positive case', () => { 
             test('should send an object (id, email, token) with status 200', (done) => { 
                 request(app)

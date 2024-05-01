@@ -22,7 +22,12 @@ module.exports = (sequelize, DataTypes) => {
     author: DataTypes.STRING,
     releaseDate: DataTypes.DATE,
     genre: DataTypes.STRING,
-    stock: DataTypes.INTEGER
+    stock: {
+      type: DataTypes.INTEGER,
+      validate: {
+        min: 0
+      }
+    }
   }, {
     sequelize,
     modelName: 'Book',

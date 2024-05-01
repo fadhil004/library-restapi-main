@@ -12,7 +12,7 @@ describe('integration testing', () => {
                 .send({
                     name: 'fadhil',
                     email: 'dyl@mail.com',
-                    password: '123'
+                    password: '123456789'
                 })
                 .end((err, res) => {
                     expect(err).toBe(null)
@@ -44,7 +44,7 @@ describe('integration testing', () => {
                 .send({
                     name: 'fadhil',
                     email: 'dyl2@mail.com',
-                    password: '123'
+                    password: '123456789'
                 })
                 .end((err, res) => {
                     expect(err).toBe(null)
@@ -75,7 +75,7 @@ describe('integration testing', () => {
                 .post('/login')
                 .send({
                     email: 'dyl@mail.com',
-                    password: '123'
+                    password: '123456789'
                 })
                 .end((err, res) => {
                     expect(err).toBe(null)
@@ -111,7 +111,7 @@ describe('integration testing', () => {
                 .post('/login')
                 .send({
                     email: 'dyl2@mail.com',
-                    password: '123'
+                    password: '123456789'
                 })
                 .end((err, res) => {
                     expect(err).toBe(null)
